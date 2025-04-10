@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMINISTRADOR</title>
+</head>
+<body>
+    <h1 class="text-center mt-5 mb-5 text-primary">JERSEYS</h1>
+    <div class="container">
+        <div class="card shadow">
+            <div class="card-body">
+                <!-- Formulario para agregar productos -->
+                <form action="/agregar_productos" method="POST" enctype="multipart/form-data">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label>Producto</label>
+                            <input type="text" class="form-control mb-3" name="nombre_producto" required>
+                        </div>
+                        <div class="col">
+                            <label>Cantidad</label>
+                            <input type="number" class="form-control mb-3" name="cantidad_producto" required>
+                        </div>
+                        <div class="col">
+                            <label>Descripción</label>
+                            <input type="number" class="form-control mb-3" name="descripcion" required>
+                        </div>
+                        <div class="col">
+                            <label>Imagen</label>
+                            <input type="file" class="form-control mb-3" name="imagen" accept="image/*">
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary mb-3 mt-4" type="submit">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- Tabla de datos -->
+                <table class="table table-bordered table-light">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for d in dato %}
+                        <tr>
+                            <td>{{ d.id_producto }}</td>
+                            <td>{{ d.nombre_producto }}</td>
+                            <td>{{ d.cantidad_producto }}</td>
+                            <td>{{ d.descripcion }}</td>
+                            <td>
+                                <img src="{{ url_for('static', filename='uploads/' + d.imagen) }}" alt="Imagen del producto">
+                            </td>
+                            <td><button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ d.id_producto }}">Editar</button></td>
+                            <td><a href="{{ url_for('delete', id=d.id_producto) }}" class="btn btn-danger btn-sm">Eliminar</a></td>
+                        </tr>
+                        <!-- Modal para editar producto -->
+                        <div class="modal fade" id="modal{{ d.id_producto }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-4">{{ d._nombre_producto }}</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/actualizar productos/{{ d.id_producto }}" method="POST" enctype="multipart/form-data">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="fw-bold">Producto</label>
+                                                        <input type="text"  class="form-control" name="producto" value="{{ d.nombre_producto }}">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="fw-bold">Cantidad</label>
+                                                        <input type="number" class="form-control" name="cantidad" value="{{ d.cantidad_producto }}">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="fw-bold">Precio</label>
+                                                        <input type="number" class="form-control" name="precio" value="{{ d.descripcion }}">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="fw-bold">Imagen actual</label><br>
+                                                        <img src="{{ url_for('static', filename='uploads/' + d.imagen) }}" width="100">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="fw-bold">Cambiar imagen</label>
+                                                        <input type="file" class="form-control" name="imagen" accept="image/*">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+                    
+</body>
+</html>
+
+admin.html
